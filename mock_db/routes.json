@@ -1,0 +1,27 @@
+{
+  "/users?page=1&limit=5": "/users?_page=1&_limit=5",
+  "/users?page=2&limit=5": "/users?_page=2&_limit=5",
+  "/users?page=3&limit=5": "/users?_page=3&_limit=5",
+  "/users?page=4&limit=5": "/users?_page=4&_limit=5",
+  "/users?page=5&limit=5": "/users?_page=5&_limit=5",
+  "/users?page=6&limit=5": "/users?_page=6&_limit=5",
+  "/users?page=7&limit=5": "/users?_page=7&_limit=5",
+  "/users?page=8&limit=5": "/users?_page=8&_limit=5",
+  "/users?page=9&limit=5": "/users?_page=9&_limit=5",
+  "/users?page=10&limit=5": "/users?_page=10&_limit=5",
+  "/users?page=11&limit=5": "/users?_page=11&_limit=5",
+  "/users?page=12&limit=5": "/users?_page=12&_limit=5",
+  "/users?page=13&limit=5": "/users?_page=13&_limit=5",
+
+  "/users?page=1&limit=10": "/users?_page=1&_limit=10",
+  "/users?page=2&limit=10": "/users?_page=2&_limit=10",
+  "/users?page=3&limit=10": "/users?_page=3&_limit=10",
+  "/users?page=4&limit=10": "/users?_page=4&_limit=10",
+  "/users?page=5&limit=10": "/users?_page=5&_limit=10",
+  "/users?page=6&limit=10": "/users?_page=6&_limit=10",
+  "/users?page=7&limit=10": "/users?_page=7&_limit=10",
+
+  "/users?page=1&limit=25": "/users?_page=1&_limit=25",
+  "/users?page=2&limit=25": "/users?_page=2&_limit=25",
+  "/users?page=3&limit=25": "/users?_page=3&_limit=25"
+}

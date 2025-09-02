@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          // Add the same in .eslintrc file too under settings.
+          "@components": "./src/components",
+          "@pages": "./src/pages",
+          "@hooks": "./src/hooks",
+          "@utils": "./src/utils",
+          "@routes": "./src/routes",
+          "@assets": "./src/assets",
+          "@sections": "./src/sections",
+          "@layouts": "./src/layouts",
+          "@redux": "./src/redux"
+        }
+      }
+    ]
+  ]
+}

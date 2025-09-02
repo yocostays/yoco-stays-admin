@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "baseUrl": ".",
+    "paths": {
+      "@components" : ["./src/components/index"],
+      "@components/*" : ["./src/components/*"],
+
+      "@pages" : ["./src/pages/index"],
+      "@pages/*" : ["./src/pages/*"],
+
+      "@hooks" : ["./src/hooks/index"],
+      "@hooks/*" : ["./src/hooks/*"],
+
+      "@routes" : ["./src/routes/index"],
+      "@routes/*" : ["./src/routes/*"],
+
+      "@sections" : ["./src/sections/index"],
+      "@sections/*" : ["./src/sections/*"],
+
+      "@layouts" : ["./src/layouts/index"],
+      "@layouts/*" : ["./src/layouts/*"],
+
+      "@redux" : ["./src/redux/index"],
+      "@redux/*" : ["./src/redux/*"],
+
+      "@utils" : ["./src/utils/index"],
+      "@utils/*" : ["./src/utils/*"],
+
+      "@assets/*" : ["./src/assets/*"]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

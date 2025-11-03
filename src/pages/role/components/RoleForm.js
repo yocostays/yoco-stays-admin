@@ -121,7 +121,7 @@ export default function RoleForm({ isEdit = false, isView = false, currentRole, 
                 <RHFAutocomplete
                   disabled={isView}
                   name="category"
-                  label="Category"
+                  label="Role Category"
                   options={ComplaintTypes || []}
                 />
               </Box>

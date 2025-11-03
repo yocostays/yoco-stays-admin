@@ -719,9 +719,19 @@ export default function RoomMapping({ isEdit, isView }) {
                         <TableCell>{room.roomNumber}</TableCell>
                         <TableCell>{room.floorNumber}</TableCell>
                         <TableCell>
-                          {Array.isArray(room.bedNumbers) && room.bedNumbers.length > 0
-                            ? room.bedNumbers.map((bed) => bed.bedNumber).join(', ')
-                            : 'No beds available'}
+                          {Array.isArray(room.bedNumbers) && room.bedNumbers.length > 0 ? (
+                            room.bedNumbers.map((bed,bedIndex) => (
+                              <span
+                                key={bedIndex}
+                                style={{ color: bed.isVacant ? "green" : "red" }}
+                              >
+                                {bed.bedNumber}
+                                {bedIndex < room.bedNumbers.length - 1 && ", "}
+                              </span>
+                            ))
+                          ) : (
+                            "No beds available"
+                          )}
                         </TableCell>
                         <TableCell>{capitalize(room.maintenanceStatus) || '-'}</TableCell>
                         <TableCell>{capitalize(room.occupancyType) || '-'}</TableCell>

@@ -11,6 +11,7 @@ import {
 import Label from '@components/label';
 import dayjs from 'dayjs';
 import { Icon } from '@iconify/react'
+import moment from 'moment';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +23,6 @@ BulkUploadTableRow.propTypes = {
 };
 
 export default function BulkUploadTableRow({ row, selected, query, index }) {
-
   const { fileType, originalFile, successFile, errorFile, createdBy, createdAt } = row;
   const { page, limit } = query
 
@@ -51,10 +51,17 @@ export default function BulkUploadTableRow({ row, selected, query, index }) {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Label
             variant="soft"
-            color='primary'
-            sx={{ textTransform: 'capitalize' }}
+            color="primary"
+            sx={{
+              textTransform: "capitalize",
+              display: "flex",
+              flexDirection: "column",
+              padding: "20px 15px",
+              lineHeight: 1.2,
+            }}
           >
-            {dayjs(createdAt).format("DD-MM-YYYY") || '--'}
+            <span>{dayjs(createdAt).format("DD-MM-YYYY") || "--"}</span>
+            <span>{moment(createdAt).format("hh:mm A")}</span>
           </Label>
         </Stack>
       </TableCell>

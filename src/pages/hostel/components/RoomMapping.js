@@ -336,7 +336,7 @@ export default function RoomMapping({ isEdit, isView }) {
 
   const handleEdit = (index) => {
     const rowData = roomDetailsArray[index];
-    const bedNumbers = rowData.bedNumbers.map((bed) => bed.bedNumber.trim);
+    const bedNumbers = rowData.bedNumbers.map((bed) => bed.bedNumber);
 
     setFormData({
       bedType: rowData.bedType,

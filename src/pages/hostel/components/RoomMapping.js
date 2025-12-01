@@ -223,7 +223,7 @@ export default function RoomMapping({ isEdit, isView }) {
 
   const onSubmit = () => {
     const data = getValues();
-    const bedNumbersData = data?.bedNumber.map((items) => ({ bedNumber: items }));
+    const bedNumbersData = data?.bedNumber.map((items) => ({ bedNumber: items.trim() }));
 
     validationSchema
       .validate(data, { abortEarly: false })
@@ -291,7 +291,7 @@ export default function RoomMapping({ isEdit, isView }) {
 
     const fData = new FormData();
     fData.append('file', excelFile);
-
+    fData.append('hostelId', id);
     try {
       const response = await axios.post(`${HOST_API_KEY}api/hostel/bulk-upload`, fData, {
         headers: {
@@ -332,7 +332,7 @@ export default function RoomMapping({ isEdit, isView }) {
       bedType: rowData.bedType,
       roomNumber: rowData.roomNumber,
       floorNumber: rowData.floorNumber,
-      bedNumber: bedNumbers,
+      bedNumber: bedNumbers.trim(),
       maintenanceStatus: rowData.maintenanceStatus,
       occupancyType: rowData.occupancyType?.value,
       roomType: rowData.roomType,
@@ -342,7 +342,7 @@ export default function RoomMapping({ isEdit, isView }) {
     setValue('bedType', rowData.bedType);
     setValue('roomNumber', rowData.roomNumber);
     setValue('floorNumber', rowData.floorNumber);
-    setValue('bedNumber', bedNumbers);
+    setValue('bedNumber', bedNumbers.trim());
     setValue('maintenanceStatus', rowData.maintenanceStatus);
     setValue('roomType', rowData.roomType);
     setValue('occupancyType', {
@@ -720,7 +720,7 @@ export default function RoomMapping({ isEdit, isView }) {
                         <TableCell>{room.floorNumber}</TableCell>
                         <TableCell>
                           {Array.isArray(room.bedNumbers) && room.bedNumbers.length > 0 ? (
-                            room.bedNumbers.map((bed,bedIndex) => (
+                            room.bedNumbers.map((bed, bedIndex) => (
                               <span
                                 key={bedIndex}
                                 style={{ color: bed.isVacant ? "green" : "red" }}

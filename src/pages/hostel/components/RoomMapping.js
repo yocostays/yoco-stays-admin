@@ -223,6 +223,16 @@ export default function RoomMapping({ isEdit, isView }) {
 
   const onSubmit = () => {
     const data = getValues();
+    const regex = /^[A-Za-z0-9]+$/;
+
+    // ⭐ Check if any bed number invalid
+    const hasInvalidBed = data?.bedNumber.some((b) => !regex.test(b.trim()));
+    if (hasInvalidBed) {
+      enqueueSnackbar("Bed number must contain only letters and numbers (e.g., B124)", {
+        variant: "error",
+      });
+      return; // stop submit
+    }
     const bedNumbersData = data?.bedNumber.map((items) => ({ bedNumber: items.trim() }));
 
     validationSchema
@@ -332,7 +342,7 @@ export default function RoomMapping({ isEdit, isView }) {
       bedType: rowData.bedType,
       roomNumber: rowData.roomNumber,
       floorNumber: rowData.floorNumber,
-      bedNumber: bedNumbers.trim(),
+      bedNumber: bedNumbers,
       maintenanceStatus: rowData.maintenanceStatus,
       occupancyType: rowData.occupancyType?.value,
       roomType: rowData.roomType,
@@ -342,7 +352,7 @@ export default function RoomMapping({ isEdit, isView }) {
     setValue('bedType', rowData.bedType);
     setValue('roomNumber', rowData.roomNumber);
     setValue('floorNumber', rowData.floorNumber);
-    setValue('bedNumber', bedNumbers.trim());
+    setValue('bedNumber', bedNumbers);
     setValue('maintenanceStatus', rowData.maintenanceStatus);
     setValue('roomType', rowData.roomType);
     setValue('occupancyType', {

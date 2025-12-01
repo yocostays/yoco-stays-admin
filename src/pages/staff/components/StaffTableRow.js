@@ -55,7 +55,7 @@ export default function StaffTableRow({
     query,
     onReload,
 }) {
-    const { name, phone, email, userName, role, createdBy, createdAt, isHostelAssigned, canAssignHostel } = row;
+    const { name, phone, email, userName, role, category, createdBy, createdAt, isHostelAssigned, canAssignHostel } = row;
 
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
@@ -238,12 +238,18 @@ export default function StaffTableRow({
                         {userName || '--'}
                     </Typography>
                 </TableCell>
-
+                <TableCell>
+                    <Typography variant="subtitle2" noWrap>
+                        {category?.name || '--'}
+                    </Typography>
+                </TableCell>
                 <TableCell>
                     <Typography variant="subtitle2" noWrap>
                         {role || '--'}
                     </Typography>
                 </TableCell>
+
+
 
                 <TableCell align="left">
                     <Label variant="soft" color="success" sx={{ textTransform: 'capitalize' }}>

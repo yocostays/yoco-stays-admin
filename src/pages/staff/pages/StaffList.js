@@ -38,6 +38,7 @@ const TABLE_HEAD = [
   { id: 'phone', label: 'Phone', align: 'left' },
   { id: 'userName', label: 'User ID', align: 'left' },
   { id: 'role', label: 'Role', align: 'left' },
+  { id: 'category', label: 'Category Type', align: 'left' },
   { id: 'createdBy', label: 'Created By', align: 'left' },
   { id: 'createdAt', label: 'Created At', align: 'left' },
 ];

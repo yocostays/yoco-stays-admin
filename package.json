@@ -57,6 +57,7 @@
     "i18next-browser-languagedetector": "^7.0.1",
     "jodit-react": "^5.2.19",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "notistack": "^2.0.8",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",

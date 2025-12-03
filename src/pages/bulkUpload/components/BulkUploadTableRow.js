@@ -11,7 +11,8 @@ import {
 import Label from '@components/label';
 import dayjs from 'dayjs';
 import { Icon } from '@iconify/react'
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone'
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +62,7 @@ export default function BulkUploadTableRow({ row, selected, query, index }) {
             }}
           >
             <span>{dayjs(createdAt).format("DD-MM-YYYY") || "--"}</span>
-            <span>{moment(createdAt).format("hh:mm A")}</span>
+            <span> {moment.utc(createdAt).format("hh:mm A")}</span>
           </Label>
         </Stack>
       </TableCell>

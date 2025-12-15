@@ -725,7 +725,6 @@ export default function RoomMapping({ isEdit, isView }) {
                   {roomDetailsArray && roomDetailsArray?.length > 0 ? (
                     roomDetailsArray?.map((room, index) => (
                       <TableRow key={index}>
-                        {console.log(room, "roooooooooooooom")}
                         <TableCell>
                           {(room.bedType === 1 && 'Single') ||
                             (room.bedType === 2 && 'Double') ||

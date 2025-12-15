@@ -1,3 +1,4 @@
+
 import CustomBreadcrumbs from '@components/custom-breadcrumbs';
 import { useSettingsContext } from '@components/settings';
 import { Box, Container, Typography } from '@mui/material';
@@ -7,9 +8,10 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTemplateByIDAsync } from '@redux/services/templateServices';
-import TemplateForm from '../components/TemplateForm';
+import ViewTemplate from '../components/ViewTemplate';
 
-export default function Template() {
+
+export default function ViewHostelTemplate() {
   const { themeStretch } = useSettingsContext();
 
   const { id } = useParams();
@@ -46,13 +48,22 @@ export default function Template() {
     };
   }, [pathname, id, state]);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(getTemplateByIDAsync(id));
+
+
+  const templatesType = [
+    {
+      templateType: "Leave Approved",
+      message: "Leave Message Approved"
+    },
+    {
+      templateType: "Leave Approved",
+      message: "Leave Message Approved"
+    },
+    {
+      templateType: "Leave Approved",
+      message: "Leave Message Approved"
     }
-  }, [dispatch, id]);
-
-
+  ]
 
   return (
     <>
@@ -72,16 +83,15 @@ export default function Template() {
               name: 'Template List',
               href: PATH_DASHBOARD.template.newlist,
             },
-             {
-              name: 'Create Templates',
-              href: PATH_DASHBOARD.template.new,
+            {
+              name: 'Hostel Templates',
+              href: PATH_DASHBOARD.template.viewTemplate(id),
             },
           ]}
         />
-    
-       <TemplateForm/>
 
-     
+        <ViewTemplate />
+
       </Container>
     </>
   );

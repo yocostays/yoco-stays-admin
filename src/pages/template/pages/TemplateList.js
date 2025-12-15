@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   Container,
@@ -210,14 +211,33 @@ export default function TemplateList() {
             { name: 'List' },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              to={PATH_DASHBOARD.template.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New Template
-            </Button>
+           <Box sx={{ display: "flex" }}>
+            <Box sx={{ marginX: "10px" }}>
+              {/* <LoadingButton type="submit" variant="contained"
+             
+              >
+                Add Hostel <AddIcon />
+              </LoadingButton> */}
+                <Button
+                component={RouterLink}
+                to={PATH_DASHBOARD.template.new}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                Create Category
+              </Button>
+            </Box>
+            <Box>
+                <Button
+                component={RouterLink}
+                to={PATH_DASHBOARD.template.new}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                Create Template
+              </Button>
+            </Box>
+          </Box>
           }
         />
 

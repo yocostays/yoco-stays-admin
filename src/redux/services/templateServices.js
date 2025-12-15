@@ -12,6 +12,17 @@ export const getTemplateListAsync = createAsyncThunk(
     })
 );
 
+export const getTemplateNewListAsync = createAsyncThunk(
+  'template/getTemplateNewListAsync',
+  async (params, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: '/api/template/hostel-templates/details',
+      method: 'get',
+      params,
+    })
+);
+
 export const getTemplateByIDAsync = createAsyncThunk(
   'template/getTemplateByID',
   async (id, toolkit) =>
@@ -51,3 +62,79 @@ export const deleteTemplateAsync = createAsyncThunk(
       method: 'delete',
     })
 );
+
+export const createCategoryAsync = createAsyncThunk(
+  'template/createtemplateCategory',
+  async (data, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/create-category`,
+      method: 'post',
+      data
+    })
+);
+
+export const getTemplateCategoryAsync = createAsyncThunk(
+  'template/templateCategory',
+  async (id, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/get-categories`,
+      method: 'get',
+    })
+);
+
+export const getHostelTemplateCategoryAsync = createAsyncThunk(
+  'template/templateHostelCategory',
+  async (id, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/hostel/${id}/categories`,
+      method: 'get',
+    })
+);
+
+export const addHostelTemplateCategoryAsync = createAsyncThunk(
+  'template/addHostelTemplateCategory',
+  async (data, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/hostel/add-subcategory`,
+      method: 'post',
+      data
+    })
+);
+
+export const deleteTemplateCategoryAsync = createAsyncThunk(
+  'template/deleteCategory',
+  async (id, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/delete-category/${id}`,
+      method: 'delete',
+    })
+);
+
+export const creatTemplateSubCategoryAsync = createAsyncThunk(
+  'template/createSubcategories',
+  async (data, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/create-subcategories`,
+      method: 'post',
+      data
+    })
+);
+
+export const deleteTemplateSubCategory = createAsyncThunk(
+  'template/deleteTemplateSubCategory',
+  async (data, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/api/template/delete-subcategory`,
+      method: 'delete',
+      data
+    })
+);
+
+

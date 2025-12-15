@@ -35,7 +35,8 @@ export default function TemplateTableRow({
   onViewRow,
   onDeleteRow,
 }) {
-  const { hostelName, title, templateType, createdBy } = row;
+ 
+  const { hostelName, hostelCode, status, templateCount, title, templateType, createdBy } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -73,7 +74,13 @@ export default function TemplateTableRow({
             </Typography>
           </Stack>
         </TableCell>
-
+        <TableCell>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography variant="subtitle2" noWrap>
+              {hostelCode || '--'}
+            </Typography>
+          </Stack>
+        </TableCell>
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
@@ -81,16 +88,23 @@ export default function TemplateTableRow({
             </Typography>
           </Stack>
         </TableCell>
-
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
-              {title || '--'}
+              {templateCount === 0 ? "0" : templateCount || '--'}
             </Typography>
           </Stack>
         </TableCell>
 
         <TableCell>
+          <Stack direction="row" alignItems="right" spacing={2}>
+            <Typography variant="subtitle2" noWrap>
+              {status ? "Active" : "Inactive" || '--'}
+            </Typography>
+          </Stack>
+        </TableCell>
+
+        {/* <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
               {templateType || '--'}
@@ -102,7 +116,7 @@ export default function TemplateTableRow({
           <Label variant="soft" color="success" sx={{ textTransform: 'capitalize' }}>
             {createdBy || '--'}
           </Label>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <MenuPopover
@@ -111,7 +125,7 @@ export default function TemplateTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             onViewRow();
             handleClosePopover();
@@ -119,7 +133,7 @@ export default function TemplateTableRow({
         >
           <Iconify icon="carbon:view-filled" />
           View
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={() => {

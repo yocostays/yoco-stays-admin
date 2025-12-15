@@ -113,10 +113,13 @@ export const PATH_DASHBOARD = {
 
   template: {
     root: path(ROOTS_DASHBOARD, '/template'),
+    newlist : path(ROOTS_DASHBOARD,'/template/new_list'),
     list: path(ROOTS_DASHBOARD, '/template/list'),
     new: path(ROOTS_DASHBOARD, '/template/new'),
+    category: path(ROOTS_DASHBOARD, '/template/category'),
     edit: (id) => path(ROOTS_DASHBOARD, `/template/${id}/edit`),
     view: (id) => path(ROOTS_DASHBOARD, `/template/${id}/view`),
+    viewTemplate: (id) => path(ROOTS_DASHBOARD, `/template/${id}/hostel`),
   },
 
    notice: {

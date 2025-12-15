@@ -51,6 +51,8 @@ export default function BedDetailForm({
       { label: 'DOUBLE', value: 2 },
       { label: 'TRIPLET', value: 3 },
       { label: 'QUADRILLE', value: 4 },
+      { label: 'QUINTUPLE', value: 5 },
+      { label: 'SIXTUPLE', value: 6 }
     ],
     []
   );
@@ -223,32 +225,32 @@ export default function BedDetailForm({
               </TableHead>
               {/* {bedDetailsArray.length > 0 ? ( */}
               <TableBody>
-                 { bedDetailsArray.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        {bedTypes.find((type) => type.value === row.bedType)?.label}
-                      </TableCell>
-                      <TableCell>{row.numberOfRooms}</TableCell>
-                      <TableCell>{row.totalBeds}</TableCell>
-                      <TableCell>{row.accommodationFee}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          aria-label="more"
-                          onClick={(event) => handleMenuOpen(event, index)}
-                        >
-                          <Iconify icon="eva:more-vertical-outline" />
-                        </IconButton>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={currentIndex === index}
-                          onClose={handleMenuClose}
-                        >
-                          <MUIItem onClick={() => handleEdit(index)}>Edit</MUIItem>
-                          <MUIItem onClick={() => handleDelete(index)}>Delete</MUIItem>
-                        </Menu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {bedDetailsArray.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {bedTypes.find((type) => type.value === row.bedType)?.label}
+                    </TableCell>
+                    <TableCell>{row.numberOfRooms}</TableCell>
+                    <TableCell>{row.totalBeds}</TableCell>
+                    <TableCell>{row.accommodationFee}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="more"
+                        onClick={(event) => handleMenuOpen(event, index)}
+                      >
+                        <Iconify icon="eva:more-vertical-outline" />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={currentIndex === index}
+                        onClose={handleMenuClose}
+                      >
+                        <MUIItem onClick={() => handleEdit(index)}>Edit</MUIItem>
+                        <MUIItem onClick={() => handleDelete(index)}>Delete</MUIItem>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
               {/* //  ) : (
               //   <TableRow sx={{display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

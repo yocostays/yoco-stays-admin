@@ -234,7 +234,12 @@ export default function RoomMapping({ isEdit, isView }) {
       return; // stop submit
     }
     const bedNumbersData = data?.bedNumber.map((items) => ({ bedNumber: items.trim() }));
-
+    if (Number(data.bedType) !== bedNumbersData.length) {
+      enqueueSnackbar(`Add  ${Number(data.bedType)} Bed Numbers`, {
+        variant: "error",
+      });
+      return; // stop submit
+    }
     validationSchema
       .validate(data, { abortEarly: false })
       .then(() => {
@@ -720,11 +725,14 @@ export default function RoomMapping({ isEdit, isView }) {
                   {roomDetailsArray && roomDetailsArray?.length > 0 ? (
                     roomDetailsArray?.map((room, index) => (
                       <TableRow key={index}>
+                        {console.log(room, "roooooooooooooom")}
                         <TableCell>
                           {(room.bedType === 1 && 'Single') ||
                             (room.bedType === 2 && 'Double') ||
                             (room.bedType === 3 && 'Triplet') ||
-                            (room.bedType === 4 && 'Quadrille')}
+                            (room.bedType === 4 && 'Quadrille') ||
+                            (room.bedType === 5 && 'Quintuple') ||
+                            (room.bedType === 6 && 'Sixtupple')}
                         </TableCell>
                         <TableCell>{room.roomNumber}</TableCell>
                         <TableCell>{room.floorNumber}</TableCell>
@@ -733,8 +741,10 @@ export default function RoomMapping({ isEdit, isView }) {
                             room.bedNumbers.map((bed, bedIndex) => (
                               <span
                                 key={bedIndex}
-                                style={{ color: bed.isVacant ? "green" : "red" }}
+                                // eslint-disable-next-line no-nested-ternary
+                                style={{ color: typeof (bed.isVacant) === "undefined" ? "blue" : bed.isVacant ? "green" : "red" }}
                               >
+                                {/* eslint-disable-next-line no-nested-ternary */}
                                 {bed.bedNumber}
                                 {bedIndex < room.bedNumbers.length - 1 && ", "}
                               </span>

@@ -144,9 +144,8 @@ export default function ViewTemplate() {
     setLoading(true)
     const payload = {
       hostelId: id,
-      update:[...updates]
+      updates:[...updates]
     }
-    console.log(payload, "payloaddd")
     dispatch(updateHostelTemplateCategoryAsync(payload)).then((resp) => {
 
       setLoading(false)

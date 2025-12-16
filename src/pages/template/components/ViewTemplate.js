@@ -129,25 +129,25 @@ export default function ViewTemplate() {
   }
 
   const onSubmitTemplates = (data) => {
-    console.log(data, "dataaaaaaaaaaa")
-    //    if (subCatAdded.some(item => item.isActive === false)) {
-    //   // handle error
-    //   toast.error('Please Add Templates',{
-    //     position: 'top-right',
-    //   })
-    //   return;
-    // }
+      console.log(data,"dataaaaaaaaaaaaaa")
+       if (subCatAdded.some(item => item.isActive === false)) {
+      toast.error('Please Add Templates',{
+        position: 'top-right',
+      })
+      return;
+    }
 
-    // const updates = data.map(item => ({
-    //   subcategoryId: item?._id
-    // }));
+    const updates = data.categories.map(item => ({
+      subcategoryId: item?._id,
+      description:item?.message
+    }));
     setLoading(true)
     const payload = {
       hostelId: id,
-      // updates: updates
+      update:[...updates]
     }
     console.log(payload, "payloaddd")
-    dispatch(addHostelTemplateCategoryAsync(payload)).then((resp) => {
+    dispatch(updateHostelTemplateCategoryAsync(payload)).then((resp) => {
 
       setLoading(false)
       dispatch(getHostelTemplateCategoryAsync(id))

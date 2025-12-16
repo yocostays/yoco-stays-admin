@@ -31,9 +31,6 @@ export default function CreateCategory() {
         watch,
         formState: { errors }
     } = useForm({
-        // defaultValues: {
-        //     categories: [{ name: "" }]
-        // },
         resolver: yupResolver(schema)
     });
 
@@ -62,7 +59,6 @@ export default function CreateCategory() {
 
         /* eslint-disable array-callback-return */
         if (getTemplateCategory?.length > 0) {
-            console.log(getTemplateCategory,"getTemplate")
             remove();
             getTemplateCategory.map((item) => {
                 append({

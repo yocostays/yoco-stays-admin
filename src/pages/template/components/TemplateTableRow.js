@@ -37,7 +37,7 @@ export default function TemplateTableRow({
   onDeleteRow,
 }) {
 
-  const { hostelName, hostelCode, status, templateCount, title, templateType, createdBy } = row;
+  const { hostelName, hostelCode, status, subCategoryCount, templateType, createdBy } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -92,7 +92,7 @@ export default function TemplateTableRow({
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
-              {templateCount === 0 ? "0" : templateCount || '--'}
+              {subCategoryCount === 0 ? "0" : subCategoryCount || '--'}
             </Typography>
           </Stack>
         </TableCell>

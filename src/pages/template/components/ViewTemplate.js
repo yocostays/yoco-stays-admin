@@ -1,8 +1,8 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box,CircularProgress, Typography, Button, TextField } from '@mui/material';
+import { Box, CircularProgress, Typography, Button, TextField } from '@mui/material';
 import { getHostelListAsync } from '@redux/services';
-import { addHostelTemplateCategoryAsync, getHostelTemplateCategoryAsync, getTemplateCategoryAsync, updateTemplateAsync } from '@redux/services/templateServices';
+import { addHostelTemplateCategoryAsync, getHostelTemplateCategoryAsync, getTemplateCategoryAsync, updateHostelTemplateCategoryAsync, updateTemplateAsync } from '@redux/services/templateServices';
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useForm, useFieldArray } from "react-hook-form";
 import * as Yup from "yup";
 import Select from 'react-select';
+import toast from 'react-hot-toast';
 
 
 
@@ -24,7 +25,8 @@ export default function ViewTemplate() {
   const { getTemplateCategory, gateHostelCategory } = useSelector((state) => state?.template)
   const [categoryLength, setCategoryLength] = useState(0)
   const [selectedOption, setSelectedOption] = useState([]);
-
+  const [edit, setEdit] = useState(true)
+  const [subCatAdded, setSubCatAdded] = useState([])
   const schema = Yup.object().shape({
     categories: Yup.array().of(
       Yup.object().shape({
@@ -44,9 +46,7 @@ export default function ViewTemplate() {
     reset,
     formState: { errors }
   } = useForm({
-    defaultValues: {
-      categories: [{ name: "" }]
-    },
+
     resolver: yupResolver(schema)
   });
 
@@ -93,7 +93,7 @@ export default function ViewTemplate() {
         }))
 
       );
-
+      setSubCatAdded(reversed)
       setCategoryLength(reversed?.length)
       /* eslint-disable array-callback-return */
       if (reversed?.length > 0) {
@@ -110,7 +110,6 @@ export default function ViewTemplate() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getTemplateCategory, gateHostelCategory])
 
-
   const onSubmit = async (data) => {
     setLoading(true)
     const payload = {
@@ -119,7 +118,37 @@ export default function ViewTemplate() {
       subcategoryId: data?._id
     }
     dispatch(addHostelTemplateCategoryAsync(payload)).then((resp) => {
-      console.log(resp,"resppppppppp")
+      dispatch(getHostelTemplateCategoryAsync(id)).then(() => {
+        setLoading(false)
+      })
+    }).catch(() => {
+      setLoading(false)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+
+  const onSubmitTemplates = (data) => {
+    console.log(data, "dataaaaaaaaaaa")
+    //    if (subCatAdded.some(item => item.isActive === false)) {
+    //   // handle error
+    //   toast.error('Please Add Templates',{
+    //     position: 'top-right',
+    //   })
+    //   return;
+    // }
+
+    // const updates = data.map(item => ({
+    //   subcategoryId: item?._id
+    // }));
+    setLoading(true)
+    const payload = {
+      hostelId: id,
+      // updates: updates
+    }
+    console.log(payload, "payloaddd")
+    dispatch(addHostelTemplateCategoryAsync(payload)).then((resp) => {
+
       setLoading(false)
       dispatch(getHostelTemplateCategoryAsync(id))
     }).catch(() => {
@@ -129,7 +158,9 @@ export default function ViewTemplate() {
     })
   }
 
-
+  const handleEdit = () => {
+    setEdit(false)
+  }
 
   return (
     <>
@@ -149,12 +180,32 @@ export default function ViewTemplate() {
           (
             <>
 
-              <Box sx={{ paddingY: 2, position: "sticky", top: "0", background: "white", zIndex: "10", justifyContent: "space-between" }}>
-                <Typography sx={{ fontSize: "14px" }}><span>{location?.state?.hostelCode}</span></Typography>
-                <Typography sx={{ fontSize: "14px" }}>Total Templates : <span>{categoryLength}</span></Typography>
-                <Box />
+              <Box sx={{ paddingY: 2, display: "flex", justifyItems: "center", position: "sticky", top: "0", background: "white", zIndex: "10", justifyContent: "space-between" }}>
+                <Box>
+                  <Typography sx={{ fontSize: "14px" }}><span>{location?.state?.hostelCode}</span></Typography>
+                  <Typography sx={{ fontSize: "14px" }}>Total Templates : <span>{categoryLength}</span></Typography>
+                </Box>
+                <Box>
+                  <Button
+                    disabled={subCatAdded?.length === 0}
+                    sx={{
+                      background: "#674D9F",
+                      color: "white",
+                      "&.Mui-disabled": {
+                        backgroundColor: "#f0f0f0",   // light grey background
+                        color: "#9e9e9e",             // grey text
+                        border: "1px solid #d3d3d3"   // optional: grey border
+                      },
+                    }}
+                    // eslint-disable-next-line no-unused-expressions
+                    onClick={() => {
+                      // eslint-disable-next-line no-unused-expressions
+                      handleEdit()
+                    }}
+                  >Edit</Button>
+                </Box>
               </Box>
-              <Box sx={{ marginY: 2, display: "flex", gap: 5 }}>
+              <Box sx={{ marginY: 2, paddingRight: 4, display: "flex", gap: 5 }}>
 
                 {/* LEFT SIDE */}
                 <Box sx={{ flex: 1 }}>
@@ -306,7 +357,7 @@ export default function ViewTemplate() {
                             sx={{ display: "flex", gap: 2, alignItems: "center", width: "100%" }}
                           >
                             <TextField
-                              disabled
+                              disabled={edit || loading}
                               {...register(`categories.${index}.message`)}
                               value={watch(`categories.${index}.message`)}
                               sx={{
@@ -354,8 +405,34 @@ export default function ViewTemplate() {
 
                       ))}
                   </Box>
+
                 </Box>
+
               </Box>
+              {fields.length === 0 && (
+                <Box><Box sx={{ marginY: 5, fontWeight: "bold", display: "flex", justifyContent: "center", alignContent: "center" }}>No Category Found</Box></Box>
+
+              )}
+              <Box sx={{
+                paddingY: 2,
+                display: "flex",
+                justifyContent: "space-between"
+              }}>
+                <Box />
+                <Button onClick={handleSubmit(onSubmitTemplates)}
+                  disabled={edit || fields.length === 0}
+                  sx={{
+                    background: "#674D9F",
+                    color: "white",
+                    "&.Mui-disabled": {
+                      backgroundColor: "#f0f0f0",   // light grey background
+                      color: "#9e9e9e",             // grey text
+                      border: "1px solid #d3d3d3"   // optional: grey border
+                    },
+                  }}
+                >Done</Button>
+              </Box>
+
             </>
           )}
       </Box>

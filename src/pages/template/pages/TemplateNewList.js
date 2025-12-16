@@ -6,8 +6,11 @@ import {
     IconButton,
     Table,
     TableBody,
+    TableCell,
     TableContainer,
+    TableRow,
     Tooltip,
+    CircularProgress
 } from '@mui/material';
 import { PATH_DASHBOARD } from '@routes/paths';
 import { useEffect, useState } from 'react';
@@ -86,10 +89,11 @@ export default function TemplateNewList() {
 
     const { themeStretch } = useSettingsContext();
     const { enqueueSnackbar } = useSnackbar();
+    const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate();
 
-    const { isLoading, getTemplateList, getNewTemplateList, totalCount ,getNewTemplateListPagination} = useSelector((store) => store?.template);
+    const { isLoading, getTemplateList, getNewTemplateList, totalCount, getNewTemplateListPagination } = useSelector((store) => store?.template);
     const dispatch = useDispatch();
 
     const [query, setQuery] = useState(DEFAULT_QUERY);
@@ -142,7 +146,7 @@ export default function TemplateNewList() {
         enqueueSnackbar('Delete success!');
     };
 
-   
+
     const handleRowsPerPageChange = (event) => {
         const value = event.target.value;
         DEFAULT_QUERY.limit = parseInt(value, 10);
@@ -170,10 +174,25 @@ export default function TemplateNewList() {
     };
 
     useEffect(() => {
+        setLoading(true)
         dispatch(getTemplateListAsync(query));
-        dispatch(getTemplateNewListAsync(query))
-     
+        dispatch(getTemplateNewListAsync(query)).then(() => {
+            setLoading(false)
+        }).catch(() => {
+            setLoading(false)
+        }).finally(() => {
+            setLoading(false)
+        })
+
     }, [dispatch, query]);
+
+
+  useEffect(() => {
+    setQuery(prev => ({
+        ...prev,
+        page: 1
+    }));
+}, []);
 
 
 
@@ -244,26 +263,48 @@ export default function TemplateNewList() {
                                 />
 
                                 <TableBody>
-                                    {getNewTemplateList?.map((row, index) => (
-                                        <TemplateTableRow
-                                            index={index}
-                                            key={row.id}
-                                            row={row}
-                                            selected={selected.includes(row?.id)}
-                                            onSelectRow={() => onSelectRow(row?.id)}
-                                            onDeleteRow={(closeModal) => handleDeleteRow(row, closeModal)}
-                                            onEditRow={() => handleEditRow(row)}
-                                            onViewRow={() => handleViewRow(row)}
-                                        />
-                                    ))}
+                                    {/* eslint-disable-next-line no-nested-ternary */}
+                                    {loading ? (
+                                        <TableRow sx={{ height: 200 }}>
+                                            <TableCell colSpan={8} align="center">
+                                                <CircularProgress size={28} />
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : getNewTemplateList.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={8} align="center">
+                                                No Data
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        getNewTemplateList.map((row, index) => (
+                                            <TemplateTableRow
+                                                key={row.id}
+                                                index={index}
+                                                row={row}
+                                                selected={selected.includes(row?.id)}
+                                                onSelectRow={() => onSelectRow(row?.id)}
+                                                onDeleteRow={(closeModal) => handleDeleteRow(row, closeModal)}
+                                                onEditRow={() => handleEditRow(row)}
+                                                onViewRow={() => handleViewRow(row)}
+                                            />
+                                        ))
+                                    )}
 
-                                    <TableEmptyRows
-                                        // height={denseHeight}
-                                        emptyRows={getNewTemplateList?.length ? query.limit - getTemplateList.length : 0}
-                                    />
-
-                                    <TableNoData isNotFound={isNotFound} />
+                                    {!loading && (
+                                        <>
+                                            <TableEmptyRows
+                                                emptyRows={
+                                                    getNewTemplateList?.length
+                                                        ? query.limit - getNewTemplateList.length
+                                                        : 0
+                                                }
+                                            />
+                                            <TableNoData isNotFound={isNotFound} />
+                                        </>
+                                    )}
                                 </TableBody>
+
                             </Table>
                         </Scrollbar>
                     </TableContainer>

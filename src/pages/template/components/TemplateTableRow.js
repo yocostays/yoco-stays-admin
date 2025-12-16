@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
 import {
+  Box,
   Button,
   IconButton,
   MenuItem,
@@ -35,7 +36,7 @@ export default function TemplateTableRow({
   onViewRow,
   onDeleteRow,
 }) {
- 
+
   const { hostelName, hostelCode, status, templateCount, title, templateType, createdBy } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -97,10 +98,20 @@ export default function TemplateTableRow({
         </TableCell>
 
         <TableCell>
-          <Stack direction="row" alignItems="right" spacing={2}>
+          <Stack direction="row" alignItems="center" spacing={1}>
+
             <Typography variant="subtitle2" noWrap>
-              {status ? "Active" : "Inactive" || '--'}
+              {status ? "Active" : "Inactive"}
             </Typography>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: status ? "green" : "red",
+                opacity: status ? 1 : 0.4,
+              }}
+            />
           </Stack>
         </TableCell>
 

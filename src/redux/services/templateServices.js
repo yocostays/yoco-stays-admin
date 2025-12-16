@@ -14,12 +14,12 @@ export const getTemplateListAsync = createAsyncThunk(
 
 export const getTemplateNewListAsync = createAsyncThunk(
   'template/getTemplateNewListAsync',
-  async (params, toolkit) =>
+  async (data, toolkit) =>
     AxiosClient({
       toolkit,
       url: '/api/template/hostel-templates/details',
-      method: 'get',
-      params,
+      method: 'post',
+      data,
     })
 );
 
@@ -101,6 +101,17 @@ export const addHostelTemplateCategoryAsync = createAsyncThunk(
       toolkit,
       url: `/api/template/hostel/add-subcategory`,
       method: 'post',
+      data
+    })
+);
+
+export const updateHostelTemplateCategoryAsync = createAsyncThunk(
+  'template/updateHostelTemplateCategory',
+  async (data, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `api/template/hostel/subcategory/update-message`,
+      method: 'patch',
       data
     })
 );

@@ -9,6 +9,7 @@ import {
   getTemplateCategoryAsync,
   getTemplateListAsync,
   getTemplateNewListAsync,
+  updateHostelTemplateCategoryAsync,
   updateTemplateAsync,
 } from '@redux/services/templateServices';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
@@ -25,7 +26,7 @@ const initialState = {
   getTemplateList: [],
   getNewTemplateList: [],
   getNewTemplateListPagination: {
-    limit:10,
+    limit: 10,
     nextPage: false,
     page: 1,
     prevPage: false,
@@ -73,12 +74,12 @@ const templateSlice = createSlice({
       state.totalCount = payload?.count;
       state.getNewTemplateList = payload?.data;
       state.getNewTemplateListPagination = {
-      limit: payload?.limit ?? 10,
-      nextPage: payload?.nextPage ?? false,
-      page: payload?.page ?? 1,
-      prevPage: payload?.prevPage ?? false,
-      totalHostels: payload?.totalHostels ?? payload?.count
-    };
+        limit: payload?.limit ?? 10,
+        nextPage: payload?.nextPage ?? false,
+        page: payload?.page ?? 1,
+        prevPage: payload?.prevPage ?? false,
+        totalHostels: payload?.totalHostels ?? payload?.count
+      };
     });
     builder.addMatcher(isAnyOf(getTemplateNewListAsync.rejected), (state, { payload }) => {
       state.isLoading = false;
@@ -125,6 +126,18 @@ const templateSlice = createSlice({
     builder.addMatcher(isAnyOf(addTemplateAsync.rejected), (state) => {
       state.isSubmitting = false;
     });
+
+    // ------- update templates hostel category         ----------------
+    builder.addMatcher(isAnyOf(updateHostelTemplateCategoryAsync.pending), (state) => {
+      state.isSubmitting = true;
+    });
+    builder.addMatcher(isAnyOf(updateHostelTemplateCategoryAsync.fulfilled), (state) => {
+      state.isSubmitting = false;
+    });
+    builder.addMatcher(isAnyOf(updateHostelTemplateCategoryAsync.rejected), (state) => {
+      state.isSubmitting = false;
+    });
+
 
     // ---------Delete template Category---------
     builder.addMatcher(isAnyOf(deleteTemplateSubCategory.pending), (state) => {

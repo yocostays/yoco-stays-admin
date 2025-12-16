@@ -88,9 +88,9 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
     reset,
     formState: { errors }
   } = useForm({
-    defaultValues: {
-      categories: [{ name: "" }]
-    },
+    // defaultValues: {
+    //   categories: [{ name: "" }]
+    // },
     resolver: yupResolver(schema)
   });
 
@@ -109,56 +109,9 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
   });
 
 
-  useEffect(() => {
-    setLoading(true)
-    dispatch(getTemplateCategoryAsync()).then(() => {
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    }).finally(() => {
-      setLoading(false)
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
 
 
-  useEffect(() => {
-    if (getTemplateCategory?.length > 0) {
-
-      // eslint-disable-next-line arrow-body-style
-      const data = getTemplateCategory.map((item) => {
-        return {
-          value: item?._id,
-          label: item?.title
-        }
-      })
-      setSelectedOption(data)
-      const reversed = getTemplateCategory.flatMap(group =>
-        group.subcategories.map(sub => ({
-          name: { value: group?._id, label: group?.title },
-          templateType: sub.title,
-          isActive: sub?.canDelete,
-          message: sub.description,
-          ...(sub._id ? { _id: sub._id } : {})  // keep subcategory _id if exists
-        }))
-      );
-      setCategoryLength(reversed?.length)
-      /* eslint-disable array-callback-return */
-      if (reversed?.length > 0) {
-        remove();
-        reversed.map((item) => {
-          append({
-            name: item?.name,
-            isActive: item?.isActive,
-            ...item
-          });
-        })
-      }
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getTemplateCategory])
 
   const onSubmit = (values) => {
     delete values.isActive
@@ -199,11 +152,60 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
     })
   }
 
+  const getTemplate = async () => {
+    setLoading(true)
+    dispatch(getTemplateCategoryAsync()).then(() => {
+      setLoading(false)
+    }).catch(() => {
+      setLoading(false)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+  useEffect(() => {
+    getTemplate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   const handleEdit = () => {
     setEdit(true)
   }
+  const templateCategorySet = async () => {
+    if (getTemplateCategory?.length > 0) {
 
+      // eslint-disable-next-line arrow-body-style
+      const data = getTemplateCategory.map((item) => {
+        return {
+          value: item?._id,
+          label: item?.title
+        }
+      })
+      setSelectedOption(data)
+      const reversed = getTemplateCategory.flatMap(group =>
+        group.subcategories.map(sub => ({
+          name: { value: group?._id, label: group?.title },
+          templateType: sub.title,
+          isActive: sub?.canDelete,
+          message: sub.description,
+          ...(sub._id ? { _id: sub._id } : {})  // keep subcategory _id if exists
+        }))
+      );
+      setCategoryLength(reversed?.length)
+      /* eslint-disable array-callback-return */
+      if (reversed?.length > 0) {
+        remove();
+        reversed.map((item) => {
+          append({
+            name: item?.name,
+            isActive: item?.isActive,
+            ...item
+          });
+        })
+      }
+    }
+
+  }
 
   const handleDeleteRow = (index, data) => {
     setLoading(true)
@@ -214,16 +216,25 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
       }
       dispatch(deleteTemplateSubCategory(payload)).then(() => {
         setLoading(false)
+        getTemplate()
+        templateCategorySet()
       }).catch(() => {
         setLoading(false)
       }).finally(() => {
         setLoading(false)
       })
     } else {
+      setLoading(false)
       remove(index)
-
     }
   }
+
+
+  useEffect(() => {
+    templateCategorySet()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getTemplateCategory])
+
   return (
     <>
       <Box sx={{ border: "1px solid #31a3fb", height: "70vh", maxHeight: "70vh", overflow: "auto", borderRadius: "10px", paddingX: 4 }}>
@@ -463,8 +474,12 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                       ))}
                   </Box>
                 </Box>
-
               </Box>
+              {fields.length === 0 && (
+                <Box><Box sx={{ fontWeight: "bold", display: "flex", justifyContent: "center", alignContent: "center" }}>No Category Found</Box></Box>
+
+              )}
+
               <Box sx={{
                 zIndex: "10", background: "white",
                 paddingY: 2,
@@ -474,7 +489,7 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                 <Box />
                 <Button
                   onClick={handleSubmit(onSubmit)}
-                  disabled={!edit || loading}
+                  disabled={!edit || loading || fields.length === 0}
                   sx={{
                     width: "126px",
                     borderRadius: "24px",

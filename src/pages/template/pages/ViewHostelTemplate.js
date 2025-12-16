@@ -73,7 +73,7 @@ export default function ViewHostelTemplate() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={editView?.heading ?? ''}
+          heading='View Template'
           links={[
             {
               name: 'Dashboard',

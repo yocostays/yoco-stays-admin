@@ -3,6 +3,8 @@ export const bedTypeLabels = {
   2: 'Double',
   3: 'Triplet',
   4: 'Quadrille',
+  5: 'Quintuple',
+  6: 'Sixtupple'
 };
 
 export const bedTypeLimits = {
@@ -10,6 +12,8 @@ export const bedTypeLimits = {
   2: 2, // Double: up to 2 beds
   3: 3, // Triplet: up to 3 beds
   4: 4, // Quadrille: up to 4 beds
+  5: 5,
+  6: 6
 };
 
 export const roomTypes = [

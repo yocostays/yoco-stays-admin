@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 import CustomBreadcrumbs from '@components/custom-breadcrumbs'
-import { Box, Button, TextField, Typography,CircularProgress, IconButton } from '@mui/material'
+import { Box, Button, TextField, Typography, CircularProgress, IconButton } from '@mui/material'
 import { createCategoryAsync, deleteTemplateCategoryAsync, getTemplateCategoryAsync } from '@redux/services/templateServices'
 
 import { PATH_DASHBOARD } from '@routes/paths'
@@ -31,9 +31,9 @@ export default function CreateCategory() {
         watch,
         formState: { errors }
     } = useForm({
-        defaultValues: {
-            categories: [{ name: "" }]
-        },
+        // defaultValues: {
+        //     categories: [{ name: "" }]
+        // },
         resolver: yupResolver(schema)
     });
 
@@ -62,6 +62,7 @@ export default function CreateCategory() {
 
         /* eslint-disable array-callback-return */
         if (getTemplateCategory?.length > 0) {
+            console.log(getTemplateCategory,"getTemplate")
             remove();
             getTemplateCategory.map((item) => {
                 append({
@@ -79,10 +80,18 @@ export default function CreateCategory() {
     }
 
     const handleDelete = (index, id) => {
+        setLoading(true)
         if (id) {
-            dispatch(deleteTemplateCategoryAsync(id))
+            dispatch(deleteTemplateCategoryAsync(id)).then(() => {
+                setLoading(false)
+            }).catch(() => {
+                setLoading(false)
+            }).finally(() => {
+                setLoading(false)
+            })
         }
         remove(index)
+        setLoading(false)
     }
 
     const onSubmit = async (values) => {
@@ -94,7 +103,7 @@ export default function CreateCategory() {
             };
         });
         dispatch(createCategoryAsync(formatted)).then((resp) => {
-            if(resp?.payload?.statusCode ===200){
+            if (resp?.payload?.statusCode === 200) {
                 toast.success(resp?.payload?.message)
                 setLoading(false)
                 setEdit(false)
@@ -169,7 +178,7 @@ export default function CreateCategory() {
                                         marginY: 3
                                     }}
                                 >
-                                    {fields.length > 0 && fields.map((data, index) => {
+                                    {fields.length > 0 ? fields.map((data, index) => {
                                         return (
                                             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
 
@@ -219,8 +228,7 @@ export default function CreateCategory() {
                                                 </Box>
                                             </Box>
                                         )
-                                    })}
-
+                                    }) : <Box sx={{ fontWeight: "bold", display: "flex", justifyContent: "center", alignContent: "center" }}>No Category Found</Box>}
 
                                 </Box>
 
@@ -233,7 +241,7 @@ export default function CreateCategory() {
                             }}>
                                 <Box />
                                 <Button onClick={handleSubmit(onSubmit)}
-                                    disabled={!edit}
+                                    disabled={!edit || fields.length===0}
                                     sx={{
                                         background: "#674D9F",
                                         color: "white",

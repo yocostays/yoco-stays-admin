@@ -90,7 +90,7 @@ export default function TemplateNewList() {
     const { themeStretch } = useSettingsContext();
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false)
-
+    
     const navigate = useNavigate();
 
     const { isLoading, getTemplateList, getNewTemplateList, totalCount, getNewTemplateListPagination } = useSelector((store) => store?.template);

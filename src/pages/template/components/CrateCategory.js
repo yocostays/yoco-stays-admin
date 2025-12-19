@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import toast from 'react-hot-toast'
+import Breadcrumbs from '@components/BreadCumbs/BreadCumbs'
 
 export default function CreateCategory() {
     const [edit, setEdit] = useState(false)
@@ -114,22 +115,10 @@ export default function CreateCategory() {
 
     return (
         <>
-            <CustomBreadcrumbs
-                heading='Create Category'
-                links={[
-                    {
-                        name: 'Dashboard',
-                        href: PATH_DASHBOARD.root,
-                    },
-                    {
-                        name: 'Template List',
-                        href: PATH_DASHBOARD.template.newlist,
-                    },
-                    {
-                        name: 'Template Category',
-                        href: PATH_DASHBOARD.template.category,
-                    },
-                ]}
+         
+            <Breadcrumbs
+                back
+                heading="Create Category"
             />
             <Box sx={{ border: "1px solid #31a3fb", maxHeight: "70vh", overflow: "auto", borderRadius: "10px", paddingX: 4 }}>
                 {loading ?
@@ -237,7 +226,7 @@ export default function CreateCategory() {
                             }}>
                                 <Box />
                                 <Button onClick={handleSubmit(onSubmit)}
-                                    disabled={!edit || fields.length===0}
+                                    disabled={!edit || fields.length === 0}
                                     sx={{
                                         background: "#674D9F",
                                         color: "white",

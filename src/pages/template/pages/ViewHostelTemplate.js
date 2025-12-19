@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTemplateByIDAsync } from '@redux/services/templateServices';
+import Breadcrumbs from '@components/BreadCumbs/BreadCumbs';
 import ViewTemplate from '../components/ViewTemplate';
 
 
@@ -70,29 +71,13 @@ export default function ViewHostelTemplate() {
       <Helmet>
         <title>{editView?.title ?? ''}</title>
       </Helmet>
-
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading='View Template'
-          links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
-              name: 'Template List',
-              href: PATH_DASHBOARD.template.newlist,
-            },
-            {
-              name: 'Hostel Templates',
-              href: PATH_DASHBOARD.template.viewTemplate(id),
-            },
-          ]}
-        />
-
+      <Breadcrumbs
+        back
+        heading="View Template"
+      />
+      {/* <Container maxWidth={themeStretch ? false : 'lg'}> */}
         <ViewTemplate />
-
-      </Container>
+      {/* </Container> */}
     </>
   );
 }

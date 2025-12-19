@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTemplateByIDAsync } from '@redux/services/templateServices';
+import Breadcrumbs from '@components/BreadCumbs/BreadCumbs';
 import TemplateForm from '../components/TemplateForm';
 
 export default function Template() {
@@ -61,27 +62,11 @@ export default function Template() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={editView?.heading ?? ''}
-          links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
-              name: 'Template List',
-              href: PATH_DASHBOARD.template.newlist,
-            },
-             {
-              name: 'Create Templates',
-              href: PATH_DASHBOARD.template.new,
-            },
-          ]}
+        <Breadcrumbs
+          back
+          heading="Create Template"
         />
-    
-       <TemplateForm/>
-
-     
+        <TemplateForm />
       </Container>
     </>
   );

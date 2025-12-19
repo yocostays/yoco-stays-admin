@@ -129,7 +129,6 @@ export default function ViewTemplate() {
   }
 
   const onSubmitTemplates = (data) => {
-      console.log(data,"dataaaaaaaaaaaaaa")
        if (subCatAdded.some(item => item.isActive === false)) {
       toast.error('Please Add Templates',{
         position: 'top-right',

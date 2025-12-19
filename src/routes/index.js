@@ -43,8 +43,10 @@ import {
   NoticeList,
   Notice,
   CreateCategory,
-  ViewHostelTemplate
+  ViewHostelTemplate,
+  Table
 } from './elements';
+
 
 export default function Router() {
   return useRoutes([
@@ -220,7 +222,8 @@ export default function Router() {
           path: 'template',
           children: [
             { element: <Navigate to="/dashboard/template/new_list" replace />, index: true },
-            { path: 'new_list', element: <TemplateNewList /> },
+            // { path: 'new_list', element: <TemplateNewList /> },
+            {path:'new_list',element:<Table/>},
             // { path: 'list', element: <TemplateList /> },
             { path: 'new', element: <Template /> },
             { path: ':id/hostel', element: <ViewHostelTemplate /> },

@@ -129,24 +129,17 @@ export default function ViewTemplate() {
   }
 
   const onSubmitTemplates = (data) => {
-       if (subCatAdded.some(item => item.isActive === false)) {
-      toast.error('Please Add Templates',{
-        position: 'top-right',
-      })
-      return;
-    }
 
     const updates = data.categories.map(item => ({
       subcategoryId: item?._id,
-      description:item?.message
+      description: item?.message
     }));
     setLoading(true)
     const payload = {
       hostelId: id,
-      updates:[...updates]
+      updates: [...updates]
     }
     dispatch(updateHostelTemplateCategoryAsync(payload)).then((resp) => {
-
       setLoading(false)
       dispatch(getHostelTemplateCategoryAsync(id))
     }).catch(() => {
@@ -157,6 +150,12 @@ export default function ViewTemplate() {
   }
 
   const handleEdit = () => {
+    if (subCatAdded.some(item => item.isActive === false)) {
+      toast.error('Please Add Templates', {
+        position: 'top-right',
+      })
+      return;
+    }
     setEdit(false)
   }
 
@@ -177,11 +176,10 @@ export default function ViewTemplate() {
           :
           (
             <>
-
               <Box sx={{ paddingY: 2, display: "flex", justifyItems: "center", position: "sticky", top: "0", background: "white", zIndex: "10", justifyContent: "space-between" }}>
                 <Box>
                   <Typography sx={{ fontSize: "14px" }}><span>{location?.state?.hostelCode}</span></Typography>
-                  <Typography sx={{ fontSize: "14px" }}>Total Templates : <span>{categoryLength}</span></Typography>
+                  <Typography sx={{ fontSize: "14px" }}>Total Templates : <span>{location?.state?.subCategoryCount}</span></Typography>
                 </Box>
                 <Box>
                   <Button

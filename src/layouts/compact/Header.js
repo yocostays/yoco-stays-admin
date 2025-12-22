@@ -68,7 +68,7 @@ function Shadow({ sx, ...other }) {
         zIndex: -1,
         m: 'auto',
         borderRadius: '50%',
-        position: 'absolute',
+        position: 'sticky',
         width: `calc(100% - 48px)`,
         boxShadow: (theme) => theme.customShadows.z8,
         ...sx,

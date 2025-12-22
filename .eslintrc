@@ -28,6 +28,7 @@
     }
   },
   "rules": {
+    "object-shorthand": "off",
     "no-alert": 0,
     "camelcase": 0,
     "no-console": 0,
@@ -81,7 +82,10 @@
       {
         "ignoreCase": false
       }
-    ]
+    ],
+    // ← Add these new rules
+    "arrow-body-style": 0, // disable arrow-body-style rule
+    "no-lone-blocks": 0 // disable nested/lone blocks
   },
   "settings": {
     "import/resolver": {

@@ -1,73 +1,32 @@
-import { templateType } from '@components/all-enums/templateEnums';
-import FormProvider, { RHFAutocomplete, RHFTextField, RHFUpload } from '@components/hook-form';
-import RHFEditor from '@components/hook-form/RHFEditor';
-import { useSnackbar } from '@components/snackbar';
+
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoadingButton } from '@mui/lab';
-import { Box, Card, CircularProgress, Grid, Stack, Typography, Button, TextField, IconButton } from '@mui/material';
+import { Box, CircularProgress, Typography, Button, TextField } from '@mui/material';
 import { getHostelListAsync } from '@redux/services';
-import { addTemplateAsync, creatTemplateSubCategoryAsync, deleteTemplateSubCategory, getTemplateCategoryAsync, updateTemplateAsync } from '@redux/services/templateServices';
-import { PATH_DASHBOARD } from '@routes/paths';
-import { capitalize } from 'lodash';
-import PropTypes from 'prop-types';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { addHostelTemplateCategoryAsync, getHostelTemplateCategoryAsync, getTemplateCategoryAsync, updateHostelTemplateCategoryAsync, updateTemplateAsync } from '@redux/services/templateServices';
+
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-// import Button from 'src/theme/overrides/Button';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useForm, useFieldArray } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-// import { IconButton } from '@mui/material'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Select from 'react-select';
-import LoadingScreen from '@components/loading-screen';
 import toast from 'react-hot-toast';
 
-TemplateForm.propTypes = {
-  isEdit: PropTypes.bool,
-  isView: PropTypes.bool,
-  currentTemplate: PropTypes.object,
-  loading: PropTypes.bool,
-};
 
-// Validation Schema
-const templateSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  description: Yup.string().required('Description is required'),
-  hostel: Yup.object()
-    .shape({
-      label: Yup.string(),
-      value: Yup.string().required('Hostel is required'),
-    })
-    .nullable()
-    .required('Hostel is required'),
-  templateType: Yup.string().required('Template type is required'),
-});
 
-export default function TemplateForm({ isEdit = false, isView = false, currentTemplate }) {
+
+export default function ViewTemplate() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getTemplateCategory } = useSelector((state) => state?.template)
-  const { hostelList } = useSelector((store) => store?.hostel);
-  const { isSubmitting } = useSelector((store) => store?.template);
+  const { id } = useParams();
+  const location = useLocation()
   const [loading, setLoading] = useState(false)
-  const { enqueueSnackbar } = useSnackbar();
-  const [edit, setEdit] = useState(false)
+
+  const { getTemplateCategory, gateHostelCategory } = useSelector((state) => state?.template)
   const [categoryLength, setCategoryLength] = useState(0)
   const [selectedOption, setSelectedOption] = useState([]);
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-
-
-
-  const hostelOptions = hostelList?.map((item) => ({
-    label: item?.name,
-    value: item?._id,
-  }));
-
+  const [edit, setEdit] = useState(true)
+  const [subCatAdded, setSubCatAdded] = useState([])
   const schema = Yup.object().shape({
     categories: Yup.array().of(
       Yup.object().shape({
@@ -78,7 +37,6 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
     )
   });
 
-
   const {
     register,
     control,
@@ -88,19 +46,9 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
     reset,
     formState: { errors }
   } = useForm({
-    // defaultValues: {
-    //   categories: [{ name: "" }]
-    // },
+
     resolver: yupResolver(schema)
   });
-
-
-
-  // Fetch roles and reset form when currentTemplate or view/edit modes change
-  useEffect(() => {
-    dispatch(getHostelListAsync({}));
-  }, [dispatch]);
-
 
 
   const { fields, append, remove } = useFieldArray({
@@ -109,71 +57,24 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
   });
 
 
-
-
-
-
-  const onSubmit = (values) => {
-    delete values.isActive
-
-    const formatted = Object.values(
-      values?.categories.reduce((acc, item) => {
-        const categoryId = item?.name?.value;   // categoryId from name.value
-
-        if (!acc[categoryId]) {
-          acc[categoryId] = {
-            categoryId,
-            subcategories: []
-          };
-        }
-
-        acc[categoryId].subcategories.push({
-          title: item.templateType,
-          description: item.message,
-          _id: item?._id
-        });
-
-        return acc;
-      }, {})
-    );
-    setLoading(true)
-    dispatch(creatTemplateSubCategoryAsync(formatted)).then((resp) => {
-      if (resp?.payload?.statusCode === 200) {
-        toast.success(resp?.payload?.message)
-        setLoading(false)
-        setEdit(false)
-        dispatch(getTemplateCategoryAsync())
-      }
-
-    }).catch(() => {
-      setLoading(false)
-    }).finally(() => {
-      setLoading(false)
-    })
-  }
-
-  const getTemplate = async () => {
-    setLoading(true)
-    dispatch(getTemplateCategoryAsync()).then(() => {
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    }).finally(() => {
-      setLoading(false)
-    })
-  }
   useEffect(() => {
-    getTemplate()
+    setLoading(true)
+    dispatch(getTemplateCategoryAsync())
+    dispatch(getHostelTemplateCategoryAsync(id)).then(() => {
+      setLoading(false)
+    }).catch(() => {
+      setLoading(false)
+    }).finally(() => {
+      setLoading(false)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
-  const handleEdit = () => {
-    setEdit(true)
-  }
-  const templateCategorySet = async () => {
-    if (getTemplateCategory?.length > 0) {
 
+  useEffect(() => {
+
+    if (getTemplateCategory?.length > 0) {
       // eslint-disable-next-line arrow-body-style
       const data = getTemplateCategory.map((item) => {
         return {
@@ -182,15 +83,17 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
         }
       })
       setSelectedOption(data)
-      const reversed = getTemplateCategory.flatMap(group =>
+      const reversed = gateHostelCategory.flatMap(group =>
         group.subcategories.map(sub => ({
-          name: { value: group?._id, label: group?.title },
+          name: { value: group?.categoryId, label: group?.categoryTitle },
           templateType: sub.title,
-          isActive: sub?.canDelete,
+          isActive: sub?.applied,
           message: sub.description,
           ...(sub._id ? { _id: sub._id } : {})  // keep subcategory _id if exists
         }))
+
       );
+      setSubCatAdded(reversed)
       setCategoryLength(reversed?.length)
       /* eslint-disable array-callback-return */
       if (reversed?.length > 0) {
@@ -204,40 +107,61 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
         })
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getTemplateCategory, gateHostelCategory])
 
-  }
-
-  const handleDeleteRow = (index, data) => {
+  const onSubmit = async (data) => {
     setLoading(true)
-    if (data._id) {
-      const payload = {
-        categoryId: data?.name?.value,
-        subcategoryId: data?._id
-      }
-      dispatch(deleteTemplateSubCategory(payload)).then(() => {
-        setLoading(false)
-        getTemplate()
-        templateCategorySet()
-      }).catch(() => {
-        setLoading(false)
-      }).finally(() => {
+    const payload = {
+      hostelId: id,
+      globalTemplateId: data?.name?.value,
+      subcategoryId: data?._id
+    }
+    dispatch(addHostelTemplateCategoryAsync(payload)).then((resp) => {
+      dispatch(getHostelTemplateCategoryAsync(id)).then(() => {
         setLoading(false)
       })
-    } else {
+    }).catch(() => {
       setLoading(false)
-      remove(index)
-    }
+    }).finally(() => {
+      setLoading(false)
+    })
   }
 
+  const onSubmitTemplates = (data) => {
 
-  useEffect(() => {
-    templateCategorySet()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getTemplateCategory])
+    const updates = data.categories.map(item => ({
+      subcategoryId: item?._id,
+      description: item?.message
+    }));
+    setLoading(true)
+    const payload = {
+      hostelId: id,
+      updates: [...updates]
+    }
+    dispatch(updateHostelTemplateCategoryAsync(payload)).then((resp) => {
+      setLoading(false)
+      dispatch(getHostelTemplateCategoryAsync(id))
+    }).catch(() => {
+      setLoading(false)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+
+  const handleEdit = () => {
+    if (subCatAdded.some(item => item.isActive === false)) {
+      toast.error('Please Add Templates', {
+        position: 'top-right',
+      })
+      return;
+    }
+    setEdit(false)
+  }
 
   return (
     <>
-      <Box sx={{ border: "1px solid #31a3fb", height: "70vh", maxHeight: "70vh", overflow: "auto", borderRadius: "10px", paddingX: 4 }}>
+      <Box sx={{ border: "1px solid #31a3fb", maxHeight: "70vh", overflow: "auto", borderRadius: "10px", paddingX: 4 }}>
         {loading ?
           <Box
             sx={{
@@ -252,30 +176,32 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
           :
           (
             <>
-              <Box sx={{ display: "flex", paddingY: 2, position: "sticky", top: "0", background: "white", zIndex: "10", justifyContent: "space-between" }}>
-                <Typography sx={{ fontSize: "14px" }}>Total Templates : <span>{categoryLength}</span></Typography>
-                <Button
-                  sx={{
-                    background: "#674D9F",
-                    color: "white",
-                    "&.Mui-disabled": {
-                      backgroundColor: "#f0f0f0",   // light grey background
-                      color: "#9e9e9e",             // grey text
-                      border: "1px solid #d3d3d3"   // optional: grey border
-                    },
-                  }}
-                  disabled={loading}
-                  // eslint-disable-next-line no-unused-expressions
-                  onClick={() => {
+              <Box sx={{ paddingY: 2, display: "flex", justifyItems: "center", position: "sticky", top: "0", background: "white", zIndex: "10", justifyContent: "space-between" }}>
+                <Box>
+                  <Typography sx={{ fontSize: "14px" }}><span>{location?.state?.hostelCode}</span></Typography>
+                  <Typography sx={{ fontSize: "14px" }}>Total Templates : <span>{location?.state?.subCategoryCount}</span></Typography>
+                </Box>
+                <Box>
+                  <Button
+                    disabled={subCatAdded?.length === 0}
+                    sx={{
+                      background: "#674D9F",
+                      color: "white",
+                      "&.Mui-disabled": {
+                        backgroundColor: "#f0f0f0",   // light grey background
+                        color: "#9e9e9e",             // grey text
+                        border: "1px solid #d3d3d3"   // optional: grey border
+                      },
+                    }}
                     // eslint-disable-next-line no-unused-expressions
-                    edit ? append({
-                      title: "",
-                      isActive: true
-                    }) : handleEdit()
-                  }}
-                >{edit ? "+" : "Edit"}</Button>
+                    onClick={() => {
+                      // eslint-disable-next-line no-unused-expressions
+                      handleEdit()
+                    }}
+                  >Edit</Button>
+                </Box>
               </Box>
-              <Box sx={{ marginY: 5, display: "flex", gap: 5 }}>
+              <Box sx={{ marginY: 2, paddingRight: 4, display: "flex", gap: 5 }}>
 
                 {/* LEFT SIDE */}
                 <Box sx={{ flex: 1 }}>
@@ -300,13 +226,14 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                             sx={{ display: "flex", gap: 2, alignItems: "center", width: "100%" }}
                           >
                             <Select
-                              isDisabled={!edit}
+                              isDisabled
                               {...register(`categories.${index}.name`)}
                               value={watch(`categories.${index}.name`)}
                               onChange={(e) => {
                                 setValue(`categories.${index}.name`, e, { shouldValidate: true })
                               }}
                               defaultValue={data.selectedOption || null} // use per-row value
+                              // onChange={(option) => handleSelectChange(option, index)} // update per row
                               options={selectedOption}
                               isClearable
                               styles={{
@@ -366,7 +293,7 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                             sx={{ display: "flex", gap: 2, alignItems: "center", width: "100%" }}
                           >
                             <TextField
-                              disabled={!edit}
+                              disabled
                               {...register(`categories.${index}.templateType`)}
                               value={watch(`categories.${index}.templateType`)}
                               onChange={(e) => {
@@ -422,11 +349,11 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                       fields.map((data, index) => (
                         <>
                           <Box
-                            key={data.id || index}
+                            key={data?.id || index}
                             sx={{ display: "flex", gap: 2, alignItems: "center", width: "100%" }}
                           >
                             <TextField
-                              disabled={!edit}
+                              disabled={edit || loading}
                               {...register(`categories.${index}.message`)}
                               value={watch(`categories.${index}.message`)}
                               sx={{
@@ -451,17 +378,18 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                               size="small"
                             />
 
-                            {edit && (
-                              <IconButton
-                                disabled={!data?.isActive}
-                                sx={{ color: data?.isActive ? "red" : "gray" }}
-                                onClick={() => handleDeleteRow(index, data)}
-                              >
-                                <DeleteOutlineIcon />
-                              </IconButton>
-                            )}
-
+                            {/* formateddd */}
+                            {!data?.isActive ? <Box sx={{ width: 40 }}>
+                              <Button sx={{ background: "#674D9F", color: "white" }}
+                                // eslint-disable-next-line no-unused-expressions
+                                onClick={() => {
+                                  // eslint-disable-next-line no-unused-expressions
+                                  onSubmit(data)
+                                }}
+                              >+</Button>
+                            </Box> : <Box sx={{ width: 40 }} />}
                           </Box>
+
                           <Box>
                             {errors?.categories?.[index]?.message && (
                               <Box sx={{ color: "red", fontSize: "14px" }}>
@@ -473,26 +401,23 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
 
                       ))}
                   </Box>
+
                 </Box>
+
               </Box>
               {fields.length === 0 && (
-                <Box><Box sx={{ fontWeight: "bold", display: "flex", justifyContent: "center", alignContent: "center" }}>No Category Found</Box></Box>
+                <Box><Box sx={{ marginY: 5, fontWeight: "bold", display: "flex", justifyContent: "center", alignContent: "center" }}>No Category Found</Box></Box>
 
               )}
-
               <Box sx={{
-                zIndex: "10", background: "white",
                 paddingY: 2,
-                display: "flex", position: "sticky", bottom: "0",
+                display: "flex",
                 justifyContent: "space-between"
               }}>
                 <Box />
-                <Button
-                  onClick={handleSubmit(onSubmit)}
-                  disabled={!edit || loading || fields.length === 0}
+                <Button onClick={handleSubmit(onSubmitTemplates)}
+                  disabled={edit || fields.length === 0}
                   sx={{
-                    width: "126px",
-                    borderRadius: "24px",
                     background: "#674D9F",
                     color: "white",
                     "&.Mui-disabled": {
@@ -503,11 +428,9 @@ export default function TemplateForm({ isEdit = false, isView = false, currentTe
                   }}
                 >Done</Button>
               </Box>
+
             </>
-          )
-        }
-
-
+          )}
       </Box>
     </>
   );

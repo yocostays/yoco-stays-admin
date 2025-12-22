@@ -1,3 +1,4 @@
+
 import CustomBreadcrumbs from '@components/custom-breadcrumbs';
 import { useSettingsContext } from '@components/settings';
 import { Box, Container, Typography } from '@mui/material';
@@ -8,9 +9,10 @@ import { useLocation, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTemplateByIDAsync } from '@redux/services/templateServices';
 import Breadcrumbs from '@components/BreadCumbs/BreadCumbs';
-import TemplateForm from '../components/TemplateForm';
+import ViewTemplate from '../components/ViewTemplate';
 
-export default function Template() {
+
+export default function ViewHostelTemplate() {
   const { themeStretch } = useSettingsContext();
 
   const { id } = useParams();
@@ -47,27 +49,35 @@ export default function Template() {
     };
   }, [pathname, id, state]);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(getTemplateByIDAsync(id));
+
+
+  const templatesType = [
+    {
+      templateType: "Leave Approved",
+      message: "Leave Message Approved"
+    },
+    {
+      templateType: "Leave Approved",
+      message: "Leave Message Approved"
+    },
+    {
+      templateType: "Leave Approved",
+      message: "Leave Message Approved"
     }
-  }, [dispatch, id]);
-
-
+  ]
 
   return (
     <>
       <Helmet>
         <title>{editView?.title ?? ''}</title>
       </Helmet>
-
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <Breadcrumbs
-          back
-          heading="Create Template"
-        />
-        <TemplateForm />
-      </Container>
+      <Breadcrumbs
+        back
+        heading="View Template"
+      />
+      {/* <Container maxWidth={themeStretch ? false : 'lg'}> */}
+        <ViewTemplate />
+      {/* </Container> */}
     </>
   );
 }

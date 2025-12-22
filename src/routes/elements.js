@@ -67,7 +67,11 @@ export const University = Loadable(lazy(() => import('@pages/university/pages/Un
 export const NoticeList = Loadable(lazy(() => import('@pages/notice/pages/NoticeList')));
 export const Notice = Loadable(lazy(() => import('@pages/notice/pages/Notice')));
 // Template
+export const Table = Loadable(lazy(()=> import('@pages/template/pages/Table')))
 export const TemplateList = Loadable(lazy(() => import('@pages/template/pages/TemplateList')));
+export const TemplateNewList = Loadable(lazy(() => import('@pages/template/pages/TemplateNewList')));
+export const ViewHostelTemplate = Loadable(lazy(() => import('@pages/template/pages/ViewHostelTemplate')));
 export const Template = Loadable(lazy(() => import('@pages/template/pages/Template')));
+export const CreateCategory = Loadable(lazy(()=> import('@pages/template/components/CrateCategory')))
 
 export const Page404 = Loadable(lazy(() => import('@pages/Page404')));

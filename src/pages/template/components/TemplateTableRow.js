@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
 import {
+  Box,
   Button,
   IconButton,
   MenuItem,
@@ -35,7 +36,8 @@ export default function TemplateTableRow({
   onViewRow,
   onDeleteRow,
 }) {
-  const { hostelName, title, templateType, createdBy } = row;
+
+  const { hostelName, hostelCode, status, subCategoryCount, templateType, createdBy } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -73,7 +75,13 @@ export default function TemplateTableRow({
             </Typography>
           </Stack>
         </TableCell>
-
+        <TableCell>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography variant="subtitle2" noWrap>
+              {hostelCode || '--'}
+            </Typography>
+          </Stack>
+        </TableCell>
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
@@ -81,16 +89,33 @@ export default function TemplateTableRow({
             </Typography>
           </Stack>
         </TableCell>
-
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
-              {title || '--'}
+              {subCategoryCount === 0 ? "0" : subCategoryCount || '--'}
             </Typography>
           </Stack>
         </TableCell>
 
         <TableCell>
+          <Stack direction="row" alignItems="center" spacing={1}>
+
+            <Typography variant="subtitle2" noWrap>
+              {status ? "Active" : "Inactive"}
+            </Typography>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: status ? "green" : "red",
+                opacity: status ? 1 : 0.4,
+              }}
+            />
+          </Stack>
+        </TableCell>
+
+        {/* <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
               {templateType || '--'}
@@ -102,7 +127,7 @@ export default function TemplateTableRow({
           <Label variant="soft" color="success" sx={{ textTransform: 'capitalize' }}>
             {createdBy || '--'}
           </Label>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <MenuPopover
@@ -111,7 +136,7 @@ export default function TemplateTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             onViewRow();
             handleClosePopover();
@@ -119,7 +144,7 @@ export default function TemplateTableRow({
         >
           <Iconify icon="carbon:view-filled" />
           View
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={() => {
